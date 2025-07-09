@@ -1,0 +1,197 @@
+[data-theme='dark'] {
+  --color-bg: #090909;
+  --color-after-bg: rgba(0, 0, 0, 0.95);
+  
+  --color-card-bg: #1d1d1d;
+  --color-card-border: #1c1c1c;
+  --color-text: #fff;
+  --color-text-sub: rgb(238, 238, 238);
+  --color-primary: #FFE30F;
+  --color-border: #ffffff;
+  --color-border2: #272727;
+  
+  --color-button-bg: #ffffff;
+  --color-button-after: linear-gradient(327deg, rgba(255, 255, 255, 1) 0%, rgba(149, 244, 170, 1) 32%, rgba(255, 233, 31, 1) 71%, rgba(255, 255, 255, 1) 100%);
+  --color-header-gr: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.54) 41%, rgb(0, 0, 0) 100%);
+  --color-contact-after:rgba(0, 0, 0, 0.8);
+  --color-bg-mid:#111;
+  
+}
+
+[data-theme='light'] {
+  --color-bg: #fafafa;
+  --color-after-bg: rgba(255, 255, 255, 0.95);
+  --color-card-border: #f1f1f1;
+  --color-text: #000000;
+  --color-text-sub: #292929;
+  --color-primary: #FFE30F;
+  --color-border: #000000;
+  --color-button-bg: #000000;
+  --color-button-after: linear-gradient(327deg, rgba(0, 0, 0, 0) 0%, rgba(149, 244, 170, 1) 32%, rgba(255, 233, 31, 1) 71%, rgba(0, 0, 0, 0) 100%);
+  --color-header-gr: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.54) 41%, rgb(255, 255, 255) 100%);
+  --color-contact-after:rgba(206, 206, 206, 0.8);
+  --color-border2: #dbdbdb;
+  --color-bg-mid:#efefef
+}
+
+body {
+  background-color: var(--color-bg);
+}
+
+.inner {
+  max-width: 160rem;
+  margin: auto;
+  position: relative;
+  height: 100%;
+  padding: 0 3rem;
+
+  @media screen and (max-width:1080px) {
+    padding: 0 2rem;
+  }
+
+  @media screen and (max-width:599px) {
+    padding: 0 1.5rem;
+  }
+
+}
+
+section {
+  position: relative;
+  min-height: 100vh;
+  padding: 0 3rem;
+  // @media screen and (max-width:1080px) {
+  //   padding: 0 2rem;
+  // }
+  // @media screen and (max-width:599px) {
+  // padding: 0 1.5rem;
+  // }
+
+  .inner {
+    height: 100%;
+    position: relative;
+    z-index: 2;
+
+    .t-wrap {
+    }
+  }
+
+  h1.tit {
+    font-weight: bold;
+    line-height: 1.2;
+    font-size: 6rem;
+    text-transform: uppercase;
+    color: var(--color-text);
+
+    @media screen and (max-width:1080px) {
+      font-size: 4.5rem;
+    }
+
+    @media screen and (max-width:599px) {
+      font-size: 3.5rem;
+    }
+
+  }
+
+  p.txt {
+    font-size: 2.2rem;
+    letter-spacing: -1.5%;
+    color: var(--color-text-sub);
+    font-weight: 300;
+    margin: 2rem 0 3rem;
+
+    @media screen and (max-width:1080px) {
+      font-size: 1.6rem;
+    }
+
+    @media screen and (max-width:599px) {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+// button
+.btn {
+  width: 14.5rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-button-bg);
+  border-radius: 4rem;
+  color: var(--color-bg);
+  font-size: 1.6rem;
+  font-weight: bold;
+  position: relative;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: background .3s;
+
+  @media screen and (max-width:1080px) {
+    width: 12rem;
+    height: 3.5rem;
+    font-size: 1.4rem;
+  }
+
+  &::after {
+    position: absolute;
+    display: block;
+    content: "";
+    border-radius: 4rem;
+    width: 150%;
+    height: 250%;
+    background: #ffffff;
+    background: var(--color-after-bg);
+    left: 190%;
+    top: 190%;
+
+    z-index: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+    transition: left .34s ease-in-out, top .24s ease-in-out;
+    z-index: 0;
+  }
+
+  span {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    // background: transparent;
+  }
+
+  &:hover:after {
+    left: 50%;
+    top: 50%;
+  }
+
+  // &.bl {
+  //   background-color: #000;
+  //   color: #fff;
+  // }
+
+  &.arrow {
+    width: 13.4rem;
+    height: 3.4rem;
+    justify-content: space-between;
+    border-radius: 0;
+    border-bottom: .2rem solid var(--color-bg);
+
+    svg {
+      fill: #fff;
+    }
+  }
+
+  // &.arrow.bl {
+  //   background-color: transparent;
+  //   border-color: #000;
+  //   color: #fff;
+
+  //   svg {
+  //     fill: #000;
+  //   }
+  // }
+
+}
+
+@keyframes gradient {}
