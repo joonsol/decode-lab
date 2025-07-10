@@ -24,7 +24,7 @@ const footerData = {
   quickLinks: [
     { label: "HOME", link: "/" },
     { label: "SERVICE", link: "/service" },
-    { label: "PORTFOLIO", link: "/works" },
+    { label: "WORKS", link: "/works" },
     { label: "NOTICE", link: "/notice" },
     { label: "CONTACT", link: "/contact" },
   ],

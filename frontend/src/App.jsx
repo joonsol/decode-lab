@@ -12,6 +12,7 @@ import Service from './Pages/Service/Service'
 import Notice from './Pages/Notice/Notice'
 import Works from './Pages/Works/Works'
 import WorkItem from './Pages/Works/WorkItem'
+import NoticeBoardItem from './Pages/Notice/NoticeBoardItem';
 import Contact from './Pages/Contact/Contact'
 import './App.scss'
 import { ThemeProvider } from './context/ThemeContext';
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '/notice',
         element: <Notice />
+      },
+      {
+        path: '/notice/:id',
+        element: <NoticeBoardItem />
       },
       {
         path: '/works',

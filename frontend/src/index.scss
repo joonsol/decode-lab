@@ -47,3 +47,54 @@ video {
   max-width: 100%;
   display: block;
 }
+[data-theme='dark'] {
+  --color-bg: #090909;
+  --color-after-bg: rgba(0, 0, 0, 0.95);
+  --color-after-bg2: rgba(0, 0, 0, 0.7);
+  --color-card-bg: #1d1d1d;
+  --color-card-border: #1c1c1c;
+  --color-text: #fff;
+  --color-text-sub: rgb(238, 238, 238);
+  --color-text-sub2: rgb(148, 148, 148);
+  --color-primary: #FFE30F;
+  --color-secondary: #4817C0;
+  --color-border: #ffffff;
+  --color-border2: #272727;
+  
+  --color-button-bg: #ffffff;
+  --color-button-after: linear-gradient(327deg, rgba(255, 255, 255, 1) 0%, rgba(149, 244, 170, 1) 32%, rgba(255, 233, 31, 1) 71%, rgba(255, 255, 255, 1) 100%);
+  --color-header-gr: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.54) 41%, rgb(0, 0, 0) 100%);
+  --color-contact-after: rgba(0, 0, 0, 0.8);
+  --color-bg-mid: #111;
+  
+  --color-sc-tit: rgba(255, 255, 255, 0.884);
+  
+
+  --color-contact-icon-bg: #272727;
+
+}
+
+[data-theme='light'] {
+  --color-bg: #fafafa;
+  --color-after-bg: rgba(255, 255, 255, 0.95);
+  --color-after-bg2: rgba(255, 235, 83, 0.863);
+  --color-card-border: #f1f1f1;
+  --color-text: #000000;
+  --color-text-sub: #292929;
+  --color-text-sub2: rgb(68, 68, 68);
+
+  --color-primary: #FFE30F;
+  --color-secondary: #4817C0;
+
+  --color-border: #000000;
+  --color-button-bg: #000000;
+  --color-button-after: linear-gradient(327deg, rgba(0, 0, 0, 0) 0%, rgba(149, 244, 170, 1) 32%, rgba(255, 233, 31, 1) 71%, rgba(0, 0, 0, 0) 100%);
+  --color-header-gr: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.54) 41%, rgb(255, 255, 255) 100%);
+  --color-contact-after: rgba(206, 206, 206, 0.8);
+  --color-border2: #adadad;
+  --color-bg-mid: rgb(245, 245, 245);
+  --color-sc-tit: rgba(0, 0, 0, 0.884);
+  --color-contact-icon-bg: #272727;
+
+
+}

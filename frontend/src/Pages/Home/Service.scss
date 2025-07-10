@@ -12,15 +12,17 @@
         gap: 5rem;
 
         .home-service-list {
-            // width: 90%;
-            // margin: auto;
+            
+            @media screen and (max-width:1080px) {
+                overflow: hidden;
+                width: 85%;
+                margin: auto;
+
+            }
+
             .splide__track {
                 visibility: visible;
                 overflow: visible;
-
-                @media screen and (max-width:1080px) {
-                    overflow: hidden;
-                }
 
             }
 

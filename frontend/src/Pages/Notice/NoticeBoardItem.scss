@@ -1,0 +1,28 @@
+.notice-board-item{
+    min-height: 80vh;
+    padding: 10rem;
+    .notice-board-wrap{
+        .post-top {
+            display: flex;
+            align-items: center;
+            background-color: var(--color-after-bg);
+            padding: 2rem;
+            font-size: 1.6rem;
+            color: var(--color-text);
+            justify-content: space-between;
+            .tit {
+                font-weight: 600;
+                width:80% ;
+            }
+        }
+        .post-content{
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: var(--color-after-bg);
+            font-size: 1.4rem;
+            min-height: 30rem;
+            color: var(--color-text);
+
+        }
+    }
+}

@@ -1,13 +1,15 @@
 import React from 'react'
 import "./Service.scss"
+import ServiceHero from './ServiceHero'
+import ServiceOverview from './ServiceOverview'
+import ServiceProcess from './ServiceProcess'
 const Service = () => {
   return (
-           <section>
-            <h1 className='tit'>title</h1>
-            <p className='txt'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta a ratione iure fuga unde repellendus dolorum. Officia dolores aut eos exercitationem dolorem aliquam. Facilis quidem, rem repellat deleniti provident placeat?
-            </p>
-        </section>
+    <div>
+      <ServiceHero />
+      <ServiceProcess />
+      <ServiceOverview />
+    </div>
   )
 }
 

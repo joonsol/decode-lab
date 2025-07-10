@@ -1,13 +1,13 @@
 import React from 'react'
 import "./Works.scss"
+import WorkHero from './WorkHero'
+import WorkList from './WorkList'
 const Works = () => {
   return (
-          <section>
-            <h1 className='tit'>title</h1>
-            <p className='txt'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta a ratione iure fuga unde repellendus dolorum. Officia dolores aut eos exercitationem dolorem aliquam. Facilis quidem, rem repellat deleniti provident placeat?
-            </p>
-        </section>
+          <div>
+            <WorkHero/>
+            <WorkList/>
+        </div>
   )
 }
 
