@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { contactInfoList } from '../../utils/contactData'; // 경로는 위치에 따라 조정
 import "./ContactForm.scss"
+import axios from "axios"
 const ContactForm = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
         message: "",
+        status:"progress"
     })
     const handleChange = (e) => {
         setFormData({
@@ -31,7 +33,7 @@ const ContactForm = () => {
                     email: "",
                     phone: "",
                     message: "",
-                    status: "in progress"
+                    status: "progress"
                 })
             }
 

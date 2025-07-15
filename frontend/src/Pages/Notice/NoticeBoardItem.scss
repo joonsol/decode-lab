@@ -8,8 +8,11 @@
             background-color: var(--color-after-bg);
             padding: 2rem;
             font-size: 1.6rem;
-            color: var(--color-text);
             justify-content: space-between;
+            span{
+                color: var(--color-text);
+
+            }
             .tit {
                 font-weight: 600;
                 width:80% ;

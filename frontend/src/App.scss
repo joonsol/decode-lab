@@ -1,7 +1,7 @@
-
-
 body {
   background-color: var(--color-bg);
+  color: var(--color-text);
+
 }
 
 .inner {
@@ -25,7 +25,7 @@ section {
   position: relative;
   min-height: 100vh;
   padding: 0 3rem;
-
+background-color: var(--color-bg);
 
   &.sub-top-section {
     min-height: auto;
@@ -149,17 +149,19 @@ section {
     color: var(--color-text-sub2);
     margin: 3rem 0 2rem;
   }
+
   p.sub-txt3 {
 
     font-size: 1.6rem;
     max-width: 50%;
     color: var(--color-text-sub2);
-margin-bottom: 3rem;
+    margin-bottom: 3rem;
   }
 
   h4 {
     font-size: 4rem;
-     @media screen and (max-width:1080px) {
+
+    @media screen and (max-width:1080px) {
       font-size: 3.2rem;
       line-height: 1.2;
     }
@@ -239,9 +241,17 @@ margin-bottom: 3rem;
 
 
   }
-  .shadow{
+
+  .shadow {
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.0199);
   }
 
-
+.go-back-btn{
+  margin-top: 3rem;
+  background-color: var(--color-card-border);
+  padding:1rem 2rem;
+  color: var(--color-text);
+  border-radius: .5rem;
+  cursor: pointer;
+}
 }

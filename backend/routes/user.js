@@ -107,8 +107,8 @@ router.post("/login", async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: false,             // ✅ 배포 환경이면 true
-      sameSite: 'none',         // ✅ 반드시 'None'
-      maxAge: 24 * 60 * 60 * 1000
+      sameSite: 'lax',         // ✅ 반드시 local에서는 lax 나중에'None'으로 바꾸기.
+      //     maxAge: 24 * 60 * 60 * 1000
     })
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
@@ -166,5 +166,31 @@ router.delete("/delete/:userId", async (req, res) => {
     res.status(500).json({ message: "서버 오류가 발생했습니다." });
   }
 });
+
+
+router.post("/verify-token", (req, res) => {
+  const token = req.cookies.token
+
+  if (!token) {
+    return res.status(400).json({
+      isValid: false,
+      message: "토큰이 없습니다."
+    })
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    return res.status(200).json({
+      isValid: true,
+      user: decoded
+    })
+  } catch (error) {
+    return res.status(401).
+      json({
+
+        isValid: false,
+        message: "유효하지 않은 토큰입니다."
+      })
+  }
+})
 // 이 라우터를 외부에서 사용할 수 있도록 내보내기
 module.exports = router;

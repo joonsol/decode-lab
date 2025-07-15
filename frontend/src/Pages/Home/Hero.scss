@@ -1,6 +1,7 @@
 .home-hero {
     height: calc(100vh - 8rem);
     overflow: hidden;
+    background-color: transparent;
     &::after {
         display: block;
         content: "";
