@@ -3,6 +3,8 @@ import "./AdminWork.scss"; // SCSS 파일 연결
 import thumbImg from '../../assets/thumb.png'
 import { Link } from 'react-router-dom';
 
+import axios from "axios"
+import Swal from "sweetalert2";
 
 const AdminWork = () => {
   const homeWorks = [
@@ -79,62 +81,150 @@ const AdminWork = () => {
       link: ""
     },
   ];
-  const [contacts, setContacts] = useState([])
+  const [works, setWorks] = useState([])
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("title");
+  useEffect(() => {
+    const fetchWorks = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/work`)
+        setWorks(response.data)
+      } catch (error) {
+        console.log("게시글 가져오기 실패", error)
+      }
+    }
+    fetchWorks()
+  }, [])
+  const getFileNameFromUrl = (url) => {
+    if (!url || typeof url !== "string") return null;
+
+    const parts = url.split("/")
+    const name = parts[parts.length - 1]
+
+    return name.trim() || null
+  }
+
+  const filteredWorks = useMemo(() => {
+    return works.filter((work) => {
+      const value = work[searchType]?.toLowerCase() || "";
+      return value.includes(searchTerm.toLowerCase())
+    })
+  }, [works, searchTerm, searchType])
+
+  const totalPages = pageSize > 0 ? Math.ceil(filteredWorks.length / pageSize) : 1;
+
+  const pagenatedWorked = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredWorks.slice(start, start + pageSize)
+  }, [filteredWorks, currentPage, pageSize])
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: '삭제하시겠습니까?',
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/work/${id}`, {
+          withCredentials: true
+        })
+        setWorks(works.filter(work => work._id !== id))
+        Swal.fire('삭제완료', '게시글이 성공적으로 석제되었습니다.', 'success')
+      } catch (error) {
+        console.error('삭제 실패:', error)
+        Swal.fire('오류발생', '삭제중 문제 발행', 'error')
+
+      }
+    }
+  }
+
+
 
   return (
     <div className="admin-work">
-      <h1>문의 관리</h1>
+      <h1>포트폴리오 관리</h1>
 
       {/* 검색 및 필터 영역 */}
       <div className="controls">
         <div className="filters">
-          <select>
-            <option value="name">이름</option>
-            <option value="email">이메일</option>
-            <option value="phone">전화번호</option>
-            <option value="message">문의내용</option>
+          <select
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+          >
+            <option value="title">이름</option>
+            <option value="desc1">설명</option>
           </select>
-          <input type="text" placeholder="검색어를 입력하세요" />
-          <select>
-            <option value="all">전체 상태</option>
-            <option value="pending">대기중</option>
-            <option value="in progress">진행중</option>
-            <option value="completed">완료</option>
-          </select>
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            type="text" placeholder="검색어를 입력하세요" />
+
         </div>
-        <div className="pagination-size">
-          <label>페이지당 표시:</label>
-          <select>
-            {[10, 25, 50, 100].map((num) => (
-              <option key={num} value={num}>{`${num}개`}</option>
-            ))}
-          </select>
-        </div>
+        <a href="/admin/works-create" className="add-button">
+          추가하기
+        </a>
       </div>
 
       {/* 총 개수 */}
-      <div className="total-count">총 {contacts.length}개의 문의</div>
+      <div className="total-count">총 {pagenatedWorked.length}개의 Works</div>
 
       {/* 리스트로 변환된 문의 목록 */}
-      <ul className="contact-list">
-        {homeWorks.map(({ title, thumb }, i) => (
+      <ul className="work-list">
+        {pagenatedWorked.map((work, index) => (
 
-          <li key={i}>
-            <Link to={`/admin/works/${i}`} >
-              <img src={thumb} alt={title} />
+          <li key={work._id}>
+            <Link to={`/admin/works-edit/${work._id}`} >
+              <h2>
+                <span>{index+1} </span>
+                {work.title}</h2>
+              <div className="img-wrap">
+             
+             {Array.isArray(work.thumb)?(
+              work.thumb.map((imgUrl, idx)=>(
+                <img key={idx} src={imgUrl} alt={`work.title image ${idx+1}`} />
+                
+              ))
+            ):(
+               <img  src={work.thumb} alt={work.title} />
+
+             )}
+              </div>
               <p>
-                {title}
+                {work.desc1}
               </p>
             </Link>
+            <button className="edit"
+              onClick={() => (
+                window.location.href = `/admin/works-edit/${work._id}`
+              )}>수정</button>
+            <button className="delete" onClick={() => handleDelete(work._id)}>삭제</button>
           </li>
         ))}
       </ul>
 
       {/* 페이지네이션 */}
       <div className="pagination">
-        <button disabled>이전</button>
-        <span>1 / 1</span>
-        <button disabled>다음</button>
+        <button
+          onClick={() => setCurrentPage((p) => p - 1)}
+          disabled={currentPage === 1 || totalPages === 0}
+        >
+          이전</button>
+        <span>
+          {totalPages > 0 ? `${currentPage} / ${totalPages}` : "0/0"}
+        </span>
+        <button
+          onClick={() => setCurrentPage((p) => p + 1)}
+          disabled={currentPage >= totalPages || totalPages === 0}
+        >다음</button>
       </div>
     </div>
   );

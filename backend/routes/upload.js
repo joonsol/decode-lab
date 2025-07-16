@@ -56,7 +56,39 @@ router.post('/image', verifyToken, imageUpload.single('image'), async (req, res)
 
     } catch (error) {
         console.error('s3 upload error: ', error)
-        res.status(500).json({error:'Failed to upload image'})
+        res.status(500).json({ error: 'Failed to upload image' })
+    }
+})
+router.post('/work-image', verifyToken, imageUpload.array('image', 3), async (req, res) => {
+    try {
+        const files = req.files;
+        const uploadUrls = [];
+
+    console.log("✅ 업로드된 파일 수:", req.files.length);
+        for (const file of files) {
+
+            const fileExtension = file.originalname.split('.').pop()
+            const fileName = `${uuidv4()}.${fileExtension}`;
+
+
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: `work-images/${fileName}`,
+                Body: file.buffer,
+                ContentType: file.mimetype
+            }
+
+            const command = new PutObjectCommand(uploadParams)
+            await s3Client.send(command)
+            const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/work-images/${fileName}`;
+            uploadUrls.push(imageUrl)
+
+        }
+        res.json({ imageUrls:uploadUrls })
+
+    } catch (error) {
+        console.error('s3 upload error: ', error)
+        res.status(500).json({ error: 'Failed to upload image' })
     }
 })
 router.post('/file', verifyToken, fileUpload.single('file'), async (req, res) => {
@@ -73,23 +105,23 @@ router.post('/file', verifyToken, fileUpload.single('file'), async (req, res) =>
             Key: `post-files/${decodedFileName}`,
             Body: file.buffer,
             ContentType: file.mimetype,
-            ContentDisposition:`attachment; filename*=UTF-8''${encodeURIComponent(decodedFileName)}`,
+            ContentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(decodedFileName)}`,
         }
 
         const command = new PutObjectCommand(uploadParams)
         await s3Client.send(command)
         const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/post-files/${decodedFileName}`;
 
-        res.json({ 
+        res.json({
             fileUrl,
-            originalname:decodedFileName
+            originalname: decodedFileName
         })
 
     } catch (error) {
         console.error('s3 upload error: ', error)
-        res.status(500).json({error:'Failed to upload image'})
+        res.status(500).json({ error: 'Failed to upload image' })
     }
 })
 
 
-module.exports=router
+module.exports = router

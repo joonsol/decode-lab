@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Notice = require("../models/Notice");
+const Work = require("../models/Work");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+
 const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3'); // S3 파일 삭제
 const { marked } = require('marked'); // 마크다운 파서
 // S3 클라이언트 설정
@@ -28,46 +29,51 @@ const authenticateToken = (req, res, next) => {
         return res.status(403).json({ message: "유효하지 않은 토큰 123" })
     }
 }
-
 router.post("/", async (req, res) => {
     try {
-        const { title, content, fileUrl } = req.body;
+        const { title, desc1, desc2, client, category, thumb, link } = req.body;
 
-        const latestNotice = await Notice.findOne().sort({ number: -1 })
-        const nextNumber = latestNotice ? latestNotice.number + 1 : 1;
+        const latestWork = await Work.findOne().sort({ number: -1 })
+        const nextNumber = latestWork ? latestWork.number + 1 : 1;
 
-        const notice = new Notice({
+        const work = new Work({
             number: nextNumber,
             title,
-            content,
-            fileUrl
+            desc1,
+            desc2,
+            client,
+            category,
+            thumb,
+            link
         })
 
-        await notice.save();
-        res.status(201).json(notice)
+        await work.save();
+        res.status(201).json({ message: "성공적 등록" })
     } catch (error) {
-        return res.status(500).json({ message: "서버 오류가 발생했습니다." })
+        return res.status(500).json({
+            message: "서버 오류가 발생했습니다.",
+
+        })
 
     }
 })
 
 router.get("/", async (req, res) => {
     try {
-        const notices = await Notice.find().sort({
+        const works = await Work.find().sort({
             createdAt: -1
         })
-        res.json(notices)
+        res.json(works)
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "서버에러" })
-
     }
 })
 router.get("/:id", async (req, res) => {
     try {
-        const notice = await Notice.findById(req.params.id)
-        if (!notice) {
-            return res.status(404).json({ message: "문의글 찾을 수 없음" })
+        const work = await Work.findById(req.params.id)
+        if (!work) {
+            return res.status(404).json({ message: "작업물을 찾을 수 없음" })
         }
 
         let ip;
@@ -80,34 +86,17 @@ router.get("/:id", async (req, res) => {
             ip = req.ip
         }
         const userAgent = req.headers["user-agent"];
-        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        const hasRecentView = notice.viewLogs.some(
-            (log) =>
-                log.ip === ip &&
-                log.userAgent === userAgent &&
-                new Date(log.timestamp) > oneDayAgo
-        );
 
-        if (!hasRecentView) {
-            notice.views += 1;
-            notice.viewLogs.push({
-                ip,
-                userAgent,
-                timestamp: new Date()
-            })
-
-            await notice.save()
-        }
         let htmlContent;
         try {
-            htmlContent = marked.parse(notice.content || '')
+            htmlContent = marked.parse(work.thumb || '')
         } catch (error) {
             console.log("마크다운 변환 실패", error)
-            htmlContent = notice.content
+            htmlContent = work.thumb
         }
 
         const responseData = {
-            ...notice.toObject(),
+            ...work.toObject(),
             renderedContent: htmlContent
         }
 
@@ -120,28 +109,32 @@ router.get("/:id", async (req, res) => {
 })
 router.put("/:id", async (req, res) => {
     try {
-        const { title, content, fileUrl } = req.body
-
-        const notice = await Notice.findById(
-            req.params.id,
-        )
-
-        if (!notice) {
-            return res.status(404).json({ message: "문의 찾을 수 없음" })
+        const {
+            title,
+            desc1,
+            desc2,
+            client,
+            category,
+            thumb,
+            link
+        } = req.body;
+        const work = await Work.findById(req.params.id)
+        if (!work) {
+            return res.status(404).json({ message: "작업물을 찾을 수 없음" })
         }
 
+
         const imgRegex = /https:\/\/[^"']*?\.(?:png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/g;
-        const oldContentImages = notice.content.match(imgRegex) || [];
-        const newContentImages = content.match(imgRegex) || [];
 
-
-
+        const oldContentImages = (work.thumb || []).filter(url => imgRegex.test(url));
+        const newContentImages = (thumb || []).filter(url => imgRegex.test(url));
         const deletedImages = oldContentImages.filter(
             (url) => !newContentImages.includes(url)
-        )
+        );
 
-        const deletedFiles = (notice.fileUrl).filter(
-            (url) => !(fileUrl || []).includes(url)
+
+        const deletedFiles = (work.thumb).filter(
+            (url) => !(thumb || []).includes(url)
         )
 
         const getS3KeyFromUrl = (url) => {
@@ -156,8 +149,8 @@ router.put("/:id", async (req, res) => {
 
         const allDeletedFiles = [...deletedFiles, ...deletedImages]
 
-        for (const fileUrl of allDeletedFiles) {
-            const key = getS3KeyFromUrl(fileUrl);
+        for (const thumb of allDeletedFiles) {
+            const key = getS3KeyFromUrl(thumb);
             if (key) {
                 console.log("파일 삭제 완료: ", key)
 
@@ -173,32 +166,35 @@ router.put("/:id", async (req, res) => {
                 }
             }
         }
-        notice.title = title;
-        notice.content = content;
-        notice.fileUrl = fileUrl;
-        notice.updatedAt = Date.now()
 
-        await notice.save()
-        res.json({ message: "성공적 수정" }, notice)
+        work.title = title;
+        work.desc1 = desc1;
+        work.desc2 = desc2;
+        work.client = client;
+        work.category = category;
+        work.thumb = thumb;
+        work.link = link;
+
+        await work.save()
+        res.json({ message: "성공적 수정" }, work)
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "서버에러" })
-
     }
 })
 router.delete("/:id", async (req, res) => {
     try {
 
-        const notice = await Notice.findByIdAndDelete(req.params.id)
+        const work = await Work.findById(req.params.id)
 
 
-        if (!notice) {
+        if (!work) {
             return res.status(404).json({ message: "문의 찾을 수 없음" })
         }
 
         const imgRegex =
             /https:\/\/[^"']*?\.(?:png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/g;
-        const contentImages = notice.content.match(imgRegex) || [];
+       const contentImages = (work.thumb || []).filter((url) => imgRegex.test(url));
 
         const getS3KeyFromUrl = (url) => {
             try {
@@ -209,7 +205,7 @@ router.delete("/:id", async (req, res) => {
                 return null;
             }
         };
-        const allFiles = [...contentImages, ...(notice.fileUrl || [])];
+        const allFiles = [...contentImages, ...(work.thumb || [])];
 
         for (const fileUrl of allFiles) {
             const key = getS3KeyFromUrl(fileUrl)
@@ -228,13 +224,12 @@ router.delete("/:id", async (req, res) => {
                 }
             }
         }
-        await notice.deleteOne()
-          res.json({ message: "게시글 및 관련 파일 삭제 완료" }); // ✅ 응답 추가
+        await work.deleteOne()
+          res.json({ message: "작업 게시글 및 관련 파일 삭제 완료" }); // ✅ 응답 추가
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "서버에러" })
 
     }
 })
-
 module.exports = router

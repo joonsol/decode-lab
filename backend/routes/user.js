@@ -59,7 +59,15 @@ router.post("/login", async (req, res) => {
 
     }
     if (user.isLoggedIn) {
-      return res.status(401).json({ message: "이미 다른 기기에서 로그인 되었어요." })
+
+      const existingToken = req.cookies.token;
+      if (!existingToken) {
+        user.isLoggedIn = false;
+        await user.save()
+      } else {
+        return res.status(401).json({ message: "이미 다른 기기에서 로그인 되었어요." })
+      }
+
 
     }
     const isValidPassword = await bcrypt.compare(password, user.password)
@@ -126,7 +134,7 @@ router.post("/login", async (req, res) => {
 router.post("/logout", async (req, res) => {
   try {
     const token = req.cookies.token;
-  console.log("🍪 받은 쿠키:", req.cookies);
+    console.log("🍪 받은 쿠키:", req.cookies);
     if (!token) {
       return res.status(400).json({ message: "이미 로그아웃된 상태입니다." });
     }

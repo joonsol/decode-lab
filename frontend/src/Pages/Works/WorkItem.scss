@@ -1,19 +1,25 @@
 .work-item {
     padding: 10rem 0;
+
     .inner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10rem;
-        .img-wrap {
-            width: 70rem;
-            height: 50rem;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .t-wrap{
-            width: 50rem;
+        .dep1 {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10rem;
+
+            .img-wrap {
+                width: 70rem;
+                height: 50rem;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .t-wrap {
+                width: 50rem;
+            }
         }
     }
 }

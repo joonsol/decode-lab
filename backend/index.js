@@ -9,6 +9,7 @@ const PORT=3000;
 
 const userRoutes = require("./routes/user")
 const noticeRoutes=require("./routes/notice")
+const workRoutes=require("./routes/work")
 const uploadRoutes=require("./routes/upload")
 const contactRoutes=require("./routes/contact")
 
@@ -30,6 +31,7 @@ app.use(cookieParser())
 app.use("/api/auth",userRoutes)
 app.use("/api/contact",contactRoutes)
 app.use("/api/notice",noticeRoutes)
+app.use("/api/work",workRoutes)
 app.use("/api/upload",uploadRoutes)
 
 app.get("/",(req, res)=>{

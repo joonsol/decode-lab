@@ -184,8 +184,16 @@ const router = createBrowserRouter([
             element: <AdminWork />
           },
           {
+            path: 'works-create',
+            element: <AdminWorkCreate />
+          },
+          {
             path: 'works/:id',
             element: <AdminWorkItem />
+          },
+          {
+            path: 'works-edit/:id',
+            element: <AdminWorkEdit />
           },
           {
             path: 'contact',
