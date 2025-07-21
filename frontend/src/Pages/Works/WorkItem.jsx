@@ -77,8 +77,8 @@ const WorkItem = () => {
             </div>
             <div className="t-wrap">
 
-              <h1 className='sub-tit'>{formData.desc1}</h1>
-              <p className='sub-txt'>{formData.title}</p>
+              <h1 className='sub-tit'>{formData.title}</h1>
+              <p className='sub-txt'>{formData.desc1}</p>
               <p className='sub-txt2'>{formData.desc2}</p>
               <p className='sub-txt3'>
                 <span>
@@ -90,7 +90,7 @@ const WorkItem = () => {
 
                 </span>
               </p>
-              <a href={formData.link} className='sub-btn btn'>
+              <a href={formData.link} className='sub-btn btn' target='_blank'>
                 project view
               </a>
             </div>

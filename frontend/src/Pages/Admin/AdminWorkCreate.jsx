@@ -41,7 +41,13 @@ const AdminWorkCreate = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  // 👉 유효성 검사
+  if (!formData.title || !formData.client || !formData.category || !formData.link) {
+    alert("모든 필수 항목을 입력해주세요.");
+    return;
+  }
   setShowUploadModal(true);
+
 
   try {
     const fileFormData = new FormData();

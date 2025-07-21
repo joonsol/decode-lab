@@ -64,11 +64,11 @@ const WorkList = () => {
 
                 </div>
                 <ul className="work-list">
-                    {pagenatedWorked.map(({_id, title, thumb }, i) => (
+                    {pagenatedWorked.map(({ _id, title, thumb }, i) => (
 
                         <li key={i}>
-                            <Link to={`/works/${_id}`} >
-                                <img src={thumb} alt={title} />
+                            <Link to={`/works/${_id}`} style={{ backgroundImage: `url(${Array.isArray(thumb) ? thumb[0] : thumb})` }}>
+
                             </Link>
                         </li>
                     ))}

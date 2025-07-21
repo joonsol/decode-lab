@@ -50,6 +50,7 @@ router.post("/", async (req, res) => {
         await work.save();
         res.status(201).json({ message: "성공적 등록" })
     } catch (error) {
+         console.error("❌ Work 저장 중 오류:", error); // ← 이거 꼭 추가
         return res.status(500).json({
             message: "서버 오류가 발생했습니다.",
 

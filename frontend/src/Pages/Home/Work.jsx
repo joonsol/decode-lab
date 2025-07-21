@@ -1,78 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+
 import thumbImg from '../../assets/thumb.png'
 import { Link, BrowserRouter } from 'react-router-dom'
 import "./Work.scss"
-
+import axios from "axios"
 const Work = () => {
 
-    const homeWorks = [
-        {
-            title: "Responsive Portfolio Site",
-            thumb: thumbImg,
-            description: "반응형으로 제작된 웹 포트폴리오 사이트",
-            category: "Web Design",
-            client: "Brand X",
-           
-        },
-        {
-            title: "E-commerce Platform",
-            thumb: thumbImg,
-            description: "사용자 중심의 UI로 설계된 쇼핑몰 플랫폼",
-            category: "UI/UX Design",
-            client: "OnlineMall Co.",
-           
-        },
-        {
-            title: "Responsive Portfolio Site",
-            thumb: thumbImg,
-            description: "반응형으로 제작된 웹 포트폴리오 사이트",
-            category: "Web Design",
-            client: "Brand X",
-           
-        },
-        {
-            title: "E-commerce Platform",
-            thumb: thumbImg,
-            description: "사용자 중심의 UI로 설계된 쇼핑몰 플랫폼",
-            category: "UI/UX Design",
-            client: "OnlineMall Co.",
-           
-        },
-        {
-            title: "Responsive Portfolio Site",
-            thumb: thumbImg,
-            description: "반응형으로 제작된 웹 포트폴리오 사이트",
-            category: "Web Design",
-            client: "Brand X",
-           
-        },
-        {
-            title: "E-commerce Platform",
-            thumb: thumbImg,
-            description: "사용자 중심의 UI로 설계된 쇼핑몰 플랫폼",
-            category: "UI/UX Design",
-            client: "OnlineMall Co.",
-           
-        },
-        {
-            title: "Responsive Portfolio Site",
-            thumb: thumbImg,
-            description: "반응형으로 제작된 웹 포트폴리오 사이트",
-            category: "Web Design",
-            client: "Brand X",
-           
-        },
-        {
-            title: "E-commerce Platform",
-            thumb: thumbImg,
-            description: "사용자 중심의 UI로 설계된 쇼핑몰 플랫폼",
-            category: "UI/UX Design",
-            client: "OnlineMall Co.",
-           
-        },
-        // 더미 데이터 추가 가능
-    ]
+    const [works, setWorks] = useState([])
+    const [pageSize, setPageSize] = useState(10);
 
+    useEffect(() => {
+        const fetchWorks = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/work`)
+                setWorks(response.data)
+            } catch (error) {
+                console.log("게시글 가져오기 실패", error)
+            }
+        }
+        fetchWorks()
+    }, [])
 
 
     return (
@@ -86,13 +33,14 @@ const Work = () => {
                         당신의 아이디어를 기술로 해석하고, <br />
                         아름다운 사용자 경험으로 구현합니다.
                     </p>
+                    <a href="/works" className="link">더보기</a>
                 </div>
                 <ul className="home-work-list">
-                    {homeWorks.map(({ title, thumb },i) => (
+                    {works.map(({ title, thumb ,_id},i) => (
 
-                        <li key={i}>
-                            <Link to={`/works/${i}`} >
-                            <img src={thumb} alt={title} />
+                        <li key={_id} alt={title}  >
+                            <Link to={`/works/${_id}`}  style={{ backgroundImage: `url(${Array.isArray(thumb) ? thumb[0] : thumb})` }}>
+                            {/* <img src={thumb} /> */}
                             </Link>
                         </li>
                     ))}
