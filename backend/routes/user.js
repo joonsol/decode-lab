@@ -114,8 +114,9 @@ router.post("/login", async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,             // ✅ 배포 환경이면 true
-      sameSite: 'lax',         // ✅ 반드시 local에서는 lax 나중에'None'으로 바꾸기.
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      //나중에'None'으로 바꾸기.
       //     maxAge: 24 * 60 * 60 * 1000
     })
     const userWithoutPassword = user.toObject();
