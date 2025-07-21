@@ -114,8 +114,8 @@ router.post("/login", async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+       secure: true,               // ✅ 배포환경이면 true
+  sameSite: 'None'            // ✅ Vercel → Cloudtype 간 요청 허용을 위해 꼭 필요
       //나중에'None'으로 바꾸기.
       //     maxAge: 24 * 60 * 60 * 1000
     })

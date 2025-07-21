@@ -16,8 +16,8 @@ const contactRoutes = require("./routes/contact")
 
 app.use(cors({
   origin: [
-    "http://localhost:5173",
-    "https://decode-lab.vercel.app"
+    "https://decode-lab.vercel.app",
+    "http://localhost:5173"
   ],
   credentials: true
 }))
